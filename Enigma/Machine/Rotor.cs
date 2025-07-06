@@ -5,32 +5,30 @@ namespace Enigma.Machine;
 /// <summary>Rotor mechanism that cyclically transforms <see cref="Alphabet"/> letters</summary>
 public struct Rotor
 {
+    public static Rotor Default = new Rotor(Alphabet.Cache);
+    
     private const byte Rollover = 26;
 
-    public byte Current => _current;
+    public byte Current => (byte)(_current + 1);
 
-    private readonly (Alphabet In, Alphabet Out)[] _shiftMap = new (Alphabet In, Alphabet Out)[Rollover];
-    private          byte                          _current;
+    private readonly Alphabet[] _shiftMap = new Alphabet[Rollover];
+    private          byte       _current;
 
-    public Rotor((Alphabet In, Alphabet Out)[] shiftMap, byte current = 0)
+    public Rotor(Alphabet[] shiftMap, byte current = 0)
     {
         if (shiftMap.Length != Rollover)
             throw new ArgumentOutOfRangeException(nameof(shiftMap), shiftMap, "ShiftMap array must contain exactly 26 elements");
 
-        ulong bitAccumulator = 0;
+        uint bitAccumulator = 0;
         for (var i = 0; i < Rollover; i++)
         {
             var s = shiftMap[i];
-            if (s.In == Alphabet.Invalid || s.Out == Alphabet.Invalid)
+            if (s == Alphabet.Invalid)
                 throw new ArgumentException("ShiftMap may not map to or from an invalid Alphabet letter");
-            if (s.In == s.Out)
-                throw new ArgumentException("Alphabet cannot be both the incoming and the outgoing letter in the ShiftMap array");
             if (BitOperations.PopCount(bitAccumulator) != 2 * i)
                 throw new ArgumentException("Alphabet may only occur once per tuple item within the ShiftMap array");
-
-            // Is there a better operator? ^=? I think a standard | is fine, and will still work with the accumulation
-            bitAccumulator |= (ulong)(shiftMap[i].In.Value) << 32;
-            bitAccumulator |= (ulong)(shiftMap[i].Out.Value);
+            
+            bitAccumulator |= shiftMap[i].Value;
             _shiftMap[i]   =  shiftMap[i];
         }
 
@@ -38,17 +36,8 @@ public struct Rotor
     }
 
     /// <summary>Process the incoming letter</summary>
-    public void Process(ref Alphabet i)
-    {
-        foreach (var shift in _shiftMap.AsSpan())
-        {
-            if (shift.In != i)
-                continue;
-
-            i = shift.Out;
-            return;
-        }
-    }
+    public void Process(ref Alphabet i) 
+        => i = _shiftMap[_current];
 
     /// <summary>Advance the rotor and return a rollover indication</summary>
     /// <returns><c>true</c> if the rotor completed a full revolution and has

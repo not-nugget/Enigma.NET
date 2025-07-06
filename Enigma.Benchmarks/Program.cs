@@ -38,37 +38,6 @@ if (args is not ["-nobench"])
 //
 // _ = a;
 
-var rotor = new Rotor([
-        (Alphabet.A, Alphabet.Z),
-        (Alphabet.B, Alphabet.Y),
-        (Alphabet.C, Alphabet.X),
-        (Alphabet.D, Alphabet.W),
-        (Alphabet.E, Alphabet.V),
-        (Alphabet.F, Alphabet.U),
-        (Alphabet.G, Alphabet.T),
-        (Alphabet.H, Alphabet.S),
-        (Alphabet.I, Alphabet.R),
-        (Alphabet.J, Alphabet.Q),
-        (Alphabet.K, Alphabet.P),
-        (Alphabet.L, Alphabet.O),
-        (Alphabet.M, Alphabet.N),
-        (Alphabet.N, Alphabet.M),
-        (Alphabet.O, Alphabet.L),
-        (Alphabet.P, Alphabet.K),
-        (Alphabet.Q, Alphabet.J),
-        (Alphabet.R, Alphabet.I),
-        (Alphabet.S, Alphabet.H),
-        (Alphabet.T, Alphabet.G),
-        (Alphabet.U, Alphabet.F),
-        (Alphabet.V, Alphabet.E),
-        (Alphabet.W, Alphabet.D),
-        (Alphabet.X, Alphabet.C),
-        (Alphabet.Y, Alphabet.B),
-        (Alphabet.Z, Alphabet.A),
-    ],
-    0
-);
-
+var rotor = Rotor.Default;
 rotor = new Rotor([], 0);
-
 _ = rotor;
