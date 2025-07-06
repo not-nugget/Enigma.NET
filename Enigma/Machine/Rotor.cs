@@ -2,19 +2,19 @@
 
 namespace Enigma.Machine;
 
-/// <summary>Rotor mechanism that cyclically transforms <see cref="Alphabet"/> letters</summary>
+/// <summary>Rotor mechanism that cyclically transforms <see cref="Letter"/> letters</summary>
 public struct Rotor
 {
-    public static Rotor Default = new Rotor(Alphabet.Cache);
+    public static Rotor Default = new Rotor(Letter.Cache);
     
     private const byte Rollover = 26;
 
     public byte Current => (byte)(_current + 1);
 
-    private readonly Alphabet[] _shiftMap = new Alphabet[Rollover];
+    private readonly Letter[] _shiftMap = new Letter[Rollover];
     private          byte       _current;
 
-    public Rotor(Alphabet[] shiftMap, byte current = 0)
+    public Rotor(Letter[] shiftMap, byte current = 0)
     {
         if (shiftMap.Length != Rollover)
             throw new ArgumentOutOfRangeException(nameof(shiftMap), shiftMap, "ShiftMap array must contain exactly 26 elements");
@@ -23,7 +23,7 @@ public struct Rotor
         for (var i = 0; i < Rollover; i++)
         {
             var s = shiftMap[i];
-            if (s == Alphabet.Invalid)
+            if (s == Letter.Invalid)
                 throw new ArgumentException("ShiftMap may not map to or from an invalid Alphabet letter");
             if (BitOperations.PopCount(bitAccumulator) != 2 * i)
                 throw new ArgumentException("Alphabet may only occur once per tuple item within the ShiftMap array");
@@ -36,7 +36,7 @@ public struct Rotor
     }
 
     /// <summary>Process the incoming letter</summary>
-    public void Process(ref Alphabet i) 
+    public void Process(ref Letter i) 
         => i = _shiftMap[_current];
 
     /// <summary>Advance the rotor and return a rollover indication</summary>

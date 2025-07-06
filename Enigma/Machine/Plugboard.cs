@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Enigma.Machine;
 
-/// <summary>Connects <see cref="Alphabet"/> letters together via <see cref="PlugboardWire"/> to further enhance encryption</summary>
+/// <summary>Connects <see cref="Letter"/> letters together via <see cref="PlugboardWire"/> to further enhance encryption</summary>
 [DebuggerDisplay("Pegboard = {_wireCount} Wires")]
 public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMarshal and get dangerous! (Because why not!)
 {
@@ -15,7 +15,7 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
     private readonly PlugboardWire[] _wires = new PlugboardWire[13]; //TODO the video I am referencing says that the machine would only have *up to* 10 wires connected at a time, do I wnat to be 100% accurate, or do i want to take some liberties?
 
     /// <summary>Plug in a new <see cref="PlugboardWire"/> to <paramref name="a"/> and <paramref name="b"/></summary>
-    public void Plug(Alphabet a, Alphabet b)
+    public void Plug(Letter a, Letter b)
     {
         if (_wireCount >= 13)
             throw new InvalidOperationException("Cannot plug more than 13 PegboardWires into the Pegboard");
@@ -31,9 +31,9 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
     }
 
     /// <summary>Unplug both ends of the wire that is connected to <paramref name="a"/></summary>
-    public void Unplug(Alphabet a)
+    public void Unplug(Letter a)
     {
-        if (a == Alphabet.Invalid)
+        if (a == Letter.Invalid)
             throw new InvalidOperationException("Cannot unplug PegboardWire from an invalid slot");
 
         if (_wireCount == 0)
@@ -60,7 +60,7 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
 
     /// <summary>Provide <paramref name="input"/> to every live <see cref="PlugboardWire"/></summary>
     /// <returns><c>true</c> if the letter was transformed, otherwise <c>false</c></returns>
-    public bool Process(ref Alphabet input)
+    public bool Process(ref Letter input)
     {
         foreach (var wire in _wires.AsSpan())
         {

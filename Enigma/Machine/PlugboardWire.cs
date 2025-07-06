@@ -2,19 +2,19 @@
 
 namespace Enigma.Machine;
 
-/// <summary>Represents a pegboard connection between two <see cref="Alphabet"/> letters</summary>
+/// <summary>Represents a pegboard connection between two <see cref="Letter"/> letters</summary>
 //[DebuggerDisplay("PegboardWire = {IsUnplugged ? \"Unplugged\" : {EndA.Upper} + \" <-> \" + {EndB.Upper}}")]
 public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, PlugboardWire, bool>, IEquatable<PlugboardWire>
 {
     public static readonly PlugboardWire Unplugged = new PlugboardWire();
 
-    public PlugboardWire() : this(Alphabet.Invalid, Alphabet.Invalid) { }
-    public PlugboardWire(Alphabet endA, Alphabet endB)
+    public PlugboardWire() : this(Letter.Invalid, Letter.Invalid) { }
+    public PlugboardWire(Letter endA, Letter endB)
     {
-        if (endA == Alphabet.Invalid && endB == Alphabet.Invalid)
+        if (endA == Letter.Invalid && endB == Letter.Invalid)
             return;
 
-        if ((endA == Alphabet.Invalid && endB != Alphabet.Invalid) || (endA != Alphabet.Invalid && endB == Alphabet.Invalid))
+        if ((endA == Letter.Invalid && endB != Letter.Invalid) || (endA != Letter.Invalid && endB == Letter.Invalid))
             throw new InvalidOperationException("Invalid PegboardWire creation parameters");
 
         if (endA == endB)
@@ -24,21 +24,21 @@ public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, Plugboa
     }
 
     /// <summary>First letter this wire is plugged into</summary>
-    public readonly Alphabet EndA = Alphabet.Invalid;
+    public readonly Letter EndA = Letter.Invalid;
 
     /// <summary>Second letter this wire is plugged into</summary>
-    public readonly Alphabet EndB = Alphabet.Invalid;
+    public readonly Letter EndB = Letter.Invalid;
 
-    /// <summary>Process the <see cref="Alphabet"/> transformation on <paramref name="input"/></summary>
+    /// <summary>Process the <see cref="Letter"/> transformation on <paramref name="input"/></summary>
     /// <returns><c>true</c> if the letter was transformed, otherwise <c>false</c></returns>
-    public bool Process(ref Alphabet input)
+    public bool Process(ref Letter input)
     {
         // Ensure either both plugs are invalid, or neither plug is invalid
         // Debug.Assert(EndA != Alphabet.Invalid && EndB == Alphabet.Invalid);
         // Debug.Assert(EndA == Alphabet.Invalid && EndB != Alphabet.Invalid);
 
-        if (EndA != Alphabet.Invalid && EndB == Alphabet.Invalid ||
-            EndA == Alphabet.Invalid && EndB != Alphabet.Invalid)
+        if (EndA != Letter.Invalid && EndB == Letter.Invalid ||
+            EndA == Letter.Invalid && EndB != Letter.Invalid)
             throw new InvalidOperationException("Cannot run PegboardWire.Process(...) on an invalid PegboardWire");
 
         if (EndA == input)
@@ -65,9 +65,9 @@ public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, Plugboa
 #if DEBUG
     public override string ToString()
     {
-        return EndA == Alphabet.Invalid && EndB == Alphabet.Invalid ?
+        return EndA == Letter.Invalid && EndB == Letter.Invalid ?
             "PegboardWire = Unplugged" :
-            (EndA == Alphabet.Invalid && EndB != Alphabet.Invalid) || (EndA != Alphabet.Invalid && EndB == Alphabet.Invalid) ?
+            (EndA == Letter.Invalid && EndB != Letter.Invalid) || (EndA != Letter.Invalid && EndB == Letter.Invalid) ?
                 "PegboardWire = Invalid" :
                 $"PegboardWire = {EndA.Upper} <-> {EndB.Upper}";
     }
