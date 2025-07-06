@@ -43,16 +43,16 @@ public readonly struct Alphabet : IEqualityOperators<Alphabet, Alphabet, bool>, 
     private const ulong UpperMask = 0b00000000_11111111_00000000000000000000000000;
     private const ulong ValueMask = 0b00000000_00000000_11111111111111111111111111;
 
-    public readonly char  Upper;
-    public readonly char  Lower;
-    public readonly ulong Value;
+    public readonly char Upper;
+    public readonly char Lower;
+    public readonly uint Value;
 
     public Alphabet() : this(0UL) { }
     private Alphabet(ulong v)
     {
         Upper = (char)(byte)((v & UpperMask) >> 26);
         Lower = (char)(byte)((v & LowerMask) >> (26 + 8));
-        Value = v & ValueMask;
+        Value = (uint)(v & ValueMask);
     }
 
     public          bool Equals(Alphabet other) => Value == other.Value;
@@ -70,6 +70,8 @@ public readonly struct Alphabet : IEqualityOperators<Alphabet, Alphabet, bool>, 
 
         return Invalid;
     }
+    /// <summary>Get the <see cref="Alphabet"/> at the provided index, between 0 and 25 (A-Z)</summary>
+    public static Alphabet FromIndex(byte i) => i > 25 ? Invalid : Cache[i];
 
     public static bool operator ==(Alphabet left, Alphabet right) => left.Equals(right);
     public static bool operator !=(Alphabet left, Alphabet right) => !(left == right);
