@@ -28,16 +28,12 @@ public class PlugboardWireTests
     }
 
     [Fact]
-    public void InvalidPlugboardWire_Throws_OnConstruct() { Should.Throw<InvalidOperationException>(() => new PlugboardWire(Alphabet.Invalid, Alphabet.A)); }
+    public void InvalidPlugboardWire_Throws_WhenConstruct()
+        => Should.Throw<InvalidOperationException>(() => new PlugboardWire(Alphabet.Invalid, Alphabet.A));
 
     [Fact]
-    public void PlugboardWire_Throws_WhenConnectingToAndFromTheSameLetter()
-    {
-        var w = new PlugboardWire(Alphabet.Invalid, Alphabet.A);
-        var a = Alphabet.A;
-
-        Should.Throw<InvalidOperationException>(() => w.Process(ref a));
-    }
+    public void SameLetterPlugboardWire_Throws_WhenConstruct()
+        => Should.Throw<InvalidOperationException>(() => new PlugboardWire(Alphabet.A, Alphabet.A));
 
     [Fact]
     public void ValidPlugboardWire_TransformsAllInputsToAllOutputs_Successfully()
@@ -50,9 +46,13 @@ public class PlugboardWireTests
         {
             foreach (var letter in Alphabet.Cache)
             {
-                var actual   = letter;
-                var expected = wire.EndA == letter ? wire.EndB : letter;
-                
+                var actual = letter;
+                var expected = wire.EndA == letter ?
+                    wire.EndB :
+                    wire.EndB == letter ?
+                        wire.EndA :
+                        letter;
+
                 wire.Process(ref actual);
                 actual.ShouldBe(expected);
             }

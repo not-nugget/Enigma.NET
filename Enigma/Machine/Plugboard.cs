@@ -3,20 +3,6 @@ using System.Runtime.CompilerServices;
 
 namespace Enigma.Machine;
 
-// public sealed class Enigma
-// {
-//     public sealed class Configuration { }
-//
-//
-//     /// <summary>Create a new Enigma machine with the provided configuration</summary>
-//     public static Enigma Create(Configuration configuration) { }
-//
-//     /// <summary>Create a new Enigma machine with a completely random configuration</summary>
-//     /// <param name="generatedConfiguration">Enigma configuration generated. Can be used to actually decode
-//     /// the messages encoded by the created Enigma machine</param>
-//     public static Enigma CreateRandom(out Configuration generatedConfiguration) { }
-// }
-
 /// <summary>Connects <see cref="Alphabet"/> letters together via <see cref="PlugboardWire"/> to further enhance encryption</summary>
 [DebuggerDisplay("Pegboard = {_wireCount} Wires")]
 public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMarshal and get dangerous! (Because why not!)
@@ -26,7 +12,7 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
 
     private byte _wireCount = 0;
 
-    private readonly PlugboardWire[] _wires = new PlugboardWire[13];
+    private readonly PlugboardWire[] _wires = new PlugboardWire[13]; //TODO the video I am referencing says that the machine would only have *up to* 10 wires connected at a time, do I wnat to be 100% accurate, or do i want to take some liberties?
 
     /// <summary>Plug in a new <see cref="PlugboardWire"/> to <paramref name="a"/> and <paramref name="b"/></summary>
     public void Plug(Alphabet a, Alphabet b)
