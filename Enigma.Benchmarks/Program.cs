@@ -20,7 +20,7 @@ if (args is not ["-nobench"])
 //     Console.WriteLine($"{f.DeclaringType!.Name}.{f.Name}: {a.Upper} {a.Lower} / {a.Value}");
 // }
 
-var pegboard = new Pegboard();
+var pegboard = new Plugboard();
 
 pegboard.Plug(Alphabet.D, Alphabet.U);
 pegboard.Plug(Alphabet.A, Alphabet.N);

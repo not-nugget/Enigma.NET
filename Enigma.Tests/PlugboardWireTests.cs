@@ -4,21 +4,21 @@ using Shouldly;
 
 namespace Enigma.Tests;
 
-public class PegboardWireTests
+public class PlugboardWireTests
 {
     [Fact]
-    public void DefaultPegboardWire_ShouldEqual_UnpluggedPegboardWire()
+    public void DefaultPlugboardWire_ShouldEqual_UnpluggedPlugboardWire()
     {
-        var a = new PegboardWire();
-        var e = PegboardWire.Unplugged;
+        var a = new PlugboardWire();
+        var e = PlugboardWire.Unplugged;
 
         a.ShouldBe(e);
     }
 
     [Fact]
-    public void UnpluggedPegboardWire_DoesNotModifyAlphabet_WhenProcessCalled()
+    public void UnpluggedPlugboardWire_DoesNotModifyAlphabet_WhenProcessCalled()
     {
-        var w = PegboardWire.Unplugged;
+        var w = PlugboardWire.Unplugged;
         var a = Alphabet.A;
         var e = Alphabet.A;
 
@@ -28,23 +28,23 @@ public class PegboardWireTests
     }
 
     [Fact]
-    public void InvalidPegboardWire_Throws_OnConstruct() { Should.Throw<InvalidOperationException>(() => new PegboardWire(Alphabet.Invalid, Alphabet.A)); }
+    public void InvalidPlugboardWire_Throws_OnConstruct() { Should.Throw<InvalidOperationException>(() => new PlugboardWire(Alphabet.Invalid, Alphabet.A)); }
 
     [Fact]
-    public void PegboardWire_Throws_WhenConnectingToAndFromTheSameLetter()
+    public void PlugboardWire_Throws_WhenConnectingToAndFromTheSameLetter()
     {
-        var w = new PegboardWire(Alphabet.Invalid, Alphabet.A);
+        var w = new PlugboardWire(Alphabet.Invalid, Alphabet.A);
         var a = Alphabet.A;
 
         Should.Throw<InvalidOperationException>(() => w.Process(ref a));
     }
 
     [Fact]
-    public void ValidPegboardWire_TransformsAllInputsToAllOutputs_Successfully()
+    public void ValidPlugboardWire_TransformsAllInputsToAllOutputs_Successfully()
     {
         var permutations = Alphabet
             .Cache
-            .SelectMany(a => Alphabet.Cache.Where(b => a != b).Select(b => new PegboardWire(a, b)));
+            .SelectMany(a => Alphabet.Cache.Where(b => a != b).Select(b => new PlugboardWire(a, b)));
 
         foreach (var wire in permutations)
         {

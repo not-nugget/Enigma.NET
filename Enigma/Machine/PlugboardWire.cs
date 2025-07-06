@@ -4,12 +4,12 @@ namespace Enigma.Machine;
 
 /// <summary>Represents a pegboard connection between two <see cref="Alphabet"/> letters</summary>
 //[DebuggerDisplay("PegboardWire = {IsUnplugged ? \"Unplugged\" : {EndA.Upper} + \" <-> \" + {EndB.Upper}}")]
-public readonly struct PegboardWire : IEqualityOperators<PegboardWire, PegboardWire, bool>, IEquatable<PegboardWire>
+public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, PlugboardWire, bool>, IEquatable<PlugboardWire>
 {
-    public static readonly PegboardWire Unplugged = new PegboardWire();
+    public static readonly PlugboardWire Unplugged = new PlugboardWire();
 
-    public PegboardWire() : this(Alphabet.Invalid, Alphabet.Invalid) { }
-    public PegboardWire(Alphabet endA, Alphabet endB)
+    public PlugboardWire() : this(Alphabet.Invalid, Alphabet.Invalid) { }
+    public PlugboardWire(Alphabet endA, Alphabet endB)
     {
         if (endA == Alphabet.Invalid && endB == Alphabet.Invalid)
             return;
@@ -56,11 +56,11 @@ public readonly struct PegboardWire : IEqualityOperators<PegboardWire, PegboardW
         return false;
     }
 
-    public          bool Equals(PegboardWire other)                         => EndA.Equals(other.EndA)   && EndB.Equals(other.EndB);
-    public override bool Equals(object?      obj)                           => obj is PegboardWire other && Equals(other);
+    public          bool Equals(PlugboardWire other)                         => EndA.Equals(other.EndA)   && EndB.Equals(other.EndB);
+    public override bool Equals(object?      obj)                           => obj is PlugboardWire other && Equals(other);
     public override int  GetHashCode()                                      => HashCode.Combine(EndA, EndB);
-    public static   bool operator ==(PegboardWire left, PegboardWire right) => left.Equals(right);
-    public static   bool operator !=(PegboardWire left, PegboardWire right) => !(left == right);
+    public static   bool operator ==(PlugboardWire left, PlugboardWire right) => left.Equals(right);
+    public static   bool operator !=(PlugboardWire left, PlugboardWire right) => !(left == right);
 
 #if DEBUG
     public override string ToString()

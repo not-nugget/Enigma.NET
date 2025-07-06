@@ -19,7 +19,7 @@ namespace Enigma.Machine;
 
 /// <summary>Connects <see cref="Alphabet"/> letters together via <see cref="PlugboardWire"/> to further enhance encryption</summary>
 [DebuggerDisplay("Pegboard = {_wireCount} Wires")]
-public struct Pegboard() //TODO rewrite everything here to use Unsafe+MemoryMarshal and get dangerous! (Because why not!)
+public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMarshal and get dangerous! (Because why not!)
 {
     /// <summary>How many <see cref="PlugboardWire"/>s are in use. Up to 13 wires may be in use at a given time</summary>
     public byte WireCount => _wireCount;
@@ -64,7 +64,7 @@ public struct Pegboard() //TODO rewrite everything here to use Unsafe+MemoryMars
         }
     }
 
-    /// <summary>Unplug all <see cref="PlugboardWire"/>, resetting the <see cref="Pegboard"/> to its original state</summary>
+    /// <summary>Unplug all <see cref="PlugboardWire"/>, resetting the <see cref="Plugboard"/> to its original state</summary>
     public void UnplugAll()
     {
         Span<PlugboardWire> reset = stackalloc PlugboardWire[_wires.Length];
