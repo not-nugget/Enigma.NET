@@ -7,6 +7,8 @@ namespace Enigma;
 [DebuggerDisplay("Alphabet = {Upper}")]
 public readonly struct Letter : IEqualityOperators<Letter, Letter, bool>, IEquatable<Letter>
 {
+    internal const int AlphabetSize = 26;
+    
     /// <summary>Invalid <see cref="Letter"/> that will cause errors when used</summary>
     public static readonly Letter Invalid = new Letter();
 

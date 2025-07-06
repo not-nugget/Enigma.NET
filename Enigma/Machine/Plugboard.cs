@@ -60,7 +60,7 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
 
     /// <summary>Provide <paramref name="input"/> to every live <see cref="PlugboardWire"/></summary>
     /// <returns><c>true</c> if the letter was transformed, otherwise <c>false</c></returns>
-    public bool Process(ref Letter input)
+    public readonly bool Process(ref Letter input)
     {
         foreach (var wire in _wires.AsSpan())
         {
