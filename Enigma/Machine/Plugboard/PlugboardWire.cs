@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
 
-namespace Enigma.Machine;
+namespace Enigma.Machine.Plugboard;
 
-/// <summary>Represents a pegboard connection between two <see cref="Letter"/> letters</summary>
-//[DebuggerDisplay("PegboardWire = {IsUnplugged ? \"Unplugged\" : {EndA.Upper} + \" <-> \" + {EndB.Upper}}")]
+/// <summary>Represents a Plugboard connection between two <see cref="Letter"/> letters</summary>
+//[DebuggerDisplay("PlugboardWire = {IsUnplugged ? \"Unplugged\" : {EndA.Upper} + \" <-> \" + {EndB.Upper}}")]
 public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, PlugboardWire, bool>, IEquatable<PlugboardWire>
 {
     public static readonly PlugboardWire Unplugged = new PlugboardWire();
@@ -15,10 +15,10 @@ public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, Plugboa
             return;
 
         if ((endA == Letter.Invalid && endB != Letter.Invalid) || (endA != Letter.Invalid && endB == Letter.Invalid))
-            throw new InvalidOperationException("Invalid PegboardWire creation parameters");
+            throw new InvalidOperationException("Invalid PlugboardWire creation parameters");
 
         if (endA == endB)
-            throw new InvalidOperationException("Cannot create a PegboardWire that plugs both ends into the same Alphabet letter");
+            throw new InvalidOperationException("Cannot create a PlugboardWire that plugs both ends into the same Alphabet letter");
         
         (EndA, EndB) = (endA, endB);
     }
@@ -39,7 +39,7 @@ public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, Plugboa
 
         if (EndA != Letter.Invalid && EndB == Letter.Invalid ||
             EndA == Letter.Invalid && EndB != Letter.Invalid)
-            throw new InvalidOperationException("Cannot run PegboardWire.Process(...) on an invalid PegboardWire");
+            throw new InvalidOperationException("Cannot run PlugboardWire.Process(...) on an invalid PlugboardWire");
 
         if (EndA == input)
         {
@@ -66,10 +66,10 @@ public readonly struct PlugboardWire : IEqualityOperators<PlugboardWire, Plugboa
     public override string ToString()
     {
         return EndA == Letter.Invalid && EndB == Letter.Invalid ?
-            "PegboardWire = Unplugged" :
+            "PlugboardWire = Unplugged" :
             (EndA == Letter.Invalid && EndB != Letter.Invalid) || (EndA != Letter.Invalid && EndB == Letter.Invalid) ?
-                "PegboardWire = Invalid" :
-                $"PegboardWire = {EndA.Upper} <-> {EndB.Upper}";
+                "PlugboardWire = Invalid" :
+                $"PlugboardWire = {EndA.Upper} <-> {EndB.Upper}";
     }
 #endif
 }

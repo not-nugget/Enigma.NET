@@ -1,4 +1,5 @@
 ﻿using Enigma.Machine;
+using Enigma.Machine.Plugboard;
 
 using Shouldly;
 

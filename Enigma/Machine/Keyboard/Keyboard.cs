@@ -1,4 +1,4 @@
-﻿namespace Enigma;
+﻿namespace Enigma.Machine.Keyboard;
 
 /// <summary>Enters the Enigma system by converting various inputs into their respective <see cref="Letter"/> outputs</summary>
 public readonly struct Keyboard()

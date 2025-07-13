@@ -1,4 +1,4 @@
-﻿namespace Enigma.Machine;
+﻿namespace Enigma.Machine.Rotors;
 
 /// <summary>Represents the three <see cref="Rotor"/>s, and the <see cref="EndRotor"/></summary>
 public struct RotorAssembly(EndRotor entryRotor, Rotor a, Rotor b, Rotor c, EndRotor reflector)

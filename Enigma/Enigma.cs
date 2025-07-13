@@ -1,4 +1,8 @@
 ﻿using Enigma.Machine;
+using Enigma.Machine.Keyboard;
+using Enigma.Machine.Lampboard;
+using Enigma.Machine.Plugboard;
+using Enigma.Machine.Rotors;
 
 namespace Enigma;
 

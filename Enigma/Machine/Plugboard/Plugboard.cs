@@ -1,30 +1,31 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
-namespace Enigma.Machine;
+namespace Enigma.Machine.Plugboard;
 
 /// <summary>Connects <see cref="Letter"/> letters together via <see cref="PlugboardWire"/> to further enhance encryption</summary>
-[DebuggerDisplay("Pegboard = {_wireCount} Wires")]
+[DebuggerDisplay("Plugboard = {_wireCount} Wires")]
 public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMarshal and get dangerous! (Because why not!)
 {
+    public const int PlugboardWires = 10;
+
     /// <summary>How many <see cref="PlugboardWire"/>s are in use. Up to 13 wires may be in use at a given time</summary>
     public byte WireCount => _wireCount;
 
     private byte _wireCount = 0;
 
-    private readonly PlugboardWire[] _wires = new PlugboardWire[13]; //TODO the video I am referencing says that the machine would only have *up to* 10 wires connected at a time, do I wnat to be 100% accurate, or do i want to take some liberties?
+    private readonly PlugboardWire[] _wires = new PlugboardWire[PlugboardWires]; //TODO the video I am referencing says that the machine would only have *up to* 10 wires connected at a time, do I wnat to be 100% accurate, or do i want to take some liberties?
 
     /// <summary>Plug in a new <see cref="PlugboardWire"/> to <paramref name="a"/> and <paramref name="b"/></summary>
     public void Plug(Letter a, Letter b)
     {
-        if (_wireCount >= 13)
-            throw new InvalidOperationException("Cannot plug more than 13 PegboardWires into the Pegboard");
+        if (_wireCount >= PlugboardWires)
+            throw new InvalidOperationException("Cannot plug more than 10 PlugboardWires into the Plugboard");
 
         var range = _wireCount > 0 ? Range.EndAt(_wireCount - 1) : Range.All;
         foreach (var wire in _wires.AsSpan(range))
         {
             if (wire.EndA == a || wire.EndB == a || wire.EndA == b || wire.EndB == b)
-                throw new InvalidOperationException("Cannot plug PegboardWire into an occupied slot");
+                throw new InvalidOperationException("Cannot plug PlugboardWire into an occupied slot");
         }
 
         _wires[_wireCount++] = new PlugboardWire(a, b);
@@ -34,7 +35,7 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
     public void Unplug(Letter a)
     {
         if (a == Letter.Invalid)
-            throw new InvalidOperationException("Cannot unplug PegboardWire from an invalid slot");
+            throw new InvalidOperationException("Cannot unplug PlugboardWire from an invalid slot");
 
         if (_wireCount == 0)
             return;
@@ -69,5 +70,27 @@ public struct Plugboard() //TODO rewrite everything here to use Unsafe+MemoryMar
         }
 
         return false;
+    }
+
+    /// <summary>Creates a <see cref="Plugboard"/> from an input string formatted like so: "ABCD..."
+    /// where each pair of letters indicates each end of a plugboard connection</summary>
+    /// <exception cref="InvalidOperationException">Thrown when the incoming string is not in the correct
+    /// format, or if an attempt to plug into the same slot twice</exception>
+    public static Plugboard Parse(ReadOnlySpan<char> input)
+    {
+        if (input is { Length: > 20 } || input.Length % 2 != 0)
+            throw new InvalidOperationException("Invalid Plugboard string format encountered");
+        
+        var                 plugboard = new Plugboard();
+        for (var i = 0; i < input.Length; i += 2)
+        {
+            var (a, b) = (input[i], input[i + 1]);
+            if (a is not (>= 'A' and <= 'Z') or (>= 'a' and <= 'z') || b is not (>= 'A' and <= 'Z') or (>= 'a' and <= 'z'))
+                throw new InvalidOperationException("Invalid Plugboard character encountered");
+
+            plugboard.Plug(Letter.FromChar(a), Letter.FromChar(b));
+        }
+
+        return plugboard;
     }
 }
